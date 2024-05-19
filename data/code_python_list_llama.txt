@@ -1,0 +1,17 @@
+Follow the comments of the following code to complete it.
+
+def output_list_initialization():
+    my_list = []
+
+    output_list = []
+    # 1. You are to concatenate elements of `my_list` and assign it to `task` variable.
+    task = 
+    # 2. Based on the task, you are to initialize the `output_list` with step-by-step instructions to achieve the task.
+    output_list.append( ) // step 1 to achieve the task
+    output_list.append( ) // step 2 to achieve the task
+    output_list.append( ) // step 3 to achieve the task
+    output_list.append( ) // step 4 to achieve the task
+    output_list.append( ) // step 5 to achieve the task
+
+if __name__ == "__main__":
+    output_list_initialization()
