@@ -5,6 +5,7 @@ import os
 import time
 import openai
 import anthropic
+import replicate
 from typing import List, Union, Dict
 from openai import OpenAI
 from datetime import datetime
@@ -13,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor
 # fill in the API key here
 os.environ["OPENAI_API_KEY"] = ""
 os.environ["ANTHROPIC_API_KEY"] = ""
-
+os.environ['REPLICATE_API_TOKEN'] = ""
 
 class PreProcessor:
     def __init__(self, prompt_type) -> None:
@@ -128,6 +129,9 @@ class TargetLLM:
             self.client = anthropic.Anthropic(
                 api_key=os.environ.get("ANTHROPIC_API_KEY")
             )
+        elif "llama" in model_name:
+            # use replicate API for llama model inference
+            self.client = None
         else:
             raise ValueError("Model name not supported.")
         self.model_name = model_name
@@ -145,6 +149,12 @@ class TargetLLM:
                     resp = self.generate_claude(query=query)
                 elif "gpt" in self.model_name:
                     resp = self.generate_gpt(query=query)
+                elif "llama" in self.model_name:
+                    resp = self.generate_llama(query=query )
+                    if resp == "":
+                        print("empty response, retrying...")
+                        time.sleep(self.query_sleep)
+                        continue
                 return resp
             except Exception as e:
                 print("error", e)
@@ -172,6 +182,21 @@ class TargetLLM:
         resp = completion.choices[0].message.content
         return resp
 
+    def generate_llama(self, query):
+        resp = ""
+        for event in replicate.stream(
+            f"meta/{self.model_name}",
+            input={
+                "debug": False,
+                "prompt": query,
+                "temperature": self.temperature,
+                "system_prompt": "",
+                "max_new_tokens": self.max_tokens,
+                "min_new_tokens": -1
+            },
+        ):
+            resp += str(event)
+        return resp
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
