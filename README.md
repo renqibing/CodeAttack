@@ -20,7 +20,7 @@ For more details, please refer to our paper [ACL 2024](https://arxiv.org/abs/240
 ✨An example run:
 ```
 python3 main.py --num-sample 1 \
---prompt-type python_stack_plus \ 
+--prompt-type python_stack_plus \
 --query-file ./data/harmful_behaviors.csv \
 --target-model=gpt-4o \
 --judge \
