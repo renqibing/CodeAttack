@@ -2,12 +2,9 @@
 A novel jailbreak method CodeAttack to systematically investigate the safety vulnerability issues of LLMs in the domain of code. 
 <br>   <br>
 
+<p align="center" style="font-size:24px;"><b>CodeAttack is one of the strongest jailbreak methods for LLMs so far.</b></p>
 <h3 align="center">RESEARCH USE ONLY✅ NO MISUSE❌</h3>
 <h3 align="center">LOVE💗 and Peace🌊</h3>
-
-<p align="center" style="font-size:24px;"><b>CodeAttack is one of the strongest jailbreak methods for all LLMs so far.</b></p>
-
-If you find a better method, please email me!
 
 ## 🆙 Updates
 - An enhanced version of CodeAttack, highly effective against the latest `GPT-4` and `Claude-3` series models, will be available next week!
@@ -38,11 +35,16 @@ python3 main.py --num-sample 1 \
 
 ## 💡Framework
 <div align="center">
-  <img src="figs/main.png" alt="Logo" width="500">
+  <img src="figs/main.png" alt="Logo" width="800">
 </div>
 
-
 Overview of our CodeAttack. CodeAttack constructs a code template with three steps: (1) Input encoding which encodes the harmful text-based query with common data structures; (2) Task understanding which applies a decode() function to allow LLMs to extract the target task from various kinds of inputs; (3) Output specification which enables LLMs to fill the output structure with the user’s desired content.
+
+## ⭐️Results 
+<div align="center">
+  <img src="figs/res.png" alt="Logo" width="800">
+</div>
+
 
 ## Citation
 
