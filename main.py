@@ -39,7 +39,7 @@ if __name__ == "__main__":
     if not args.no_attack:
         # 2. Attack the victime model and Auto-evaluate the results
         args.data_key = f"code_wrapped_{args.prompt_type}"
-        query_name = args._query_file.split('/')[-1].split('.')[0]
+        query_name = args.query_file.split('/')[-1].split('.')[0]
         f = open(
             f"./prompts/data_{query_name}_{args.prompt_type}.json",
         )
