@@ -1,20 +1,22 @@
-import os
-import json
 import time
 from openai import OpenAI
 from typing import Union, List
-import numpy as np
 
-# Implement your gpt client here 
+
+# Implement your gpt client here
 API_KEY = ""
 BASE_URL_GPT = ""
 gpt_client = OpenAI(base_url=BASE_URL_GPT, api_key=API_KEY)
-# Implement your claude client here 
+# Implement your claude client here
 claude_client = ""
-# Implement your llama client here 
+# Implement your llama client here
 llama_client = ""
 
-def api_call(client, query: Union[List, str], model_name="gpt-4o", response_format='text', temperature=1):
+
+def api_call(client, query: Union[List, str],
+             model_name="gpt-4o",
+             response_format='text',
+             temperature=1):
     if isinstance(query, List):
         messages = query
     elif isinstance(query, str):
@@ -27,7 +29,7 @@ def api_call(client, query: Union[List, str], model_name="gpt-4o", response_form
                 max_tokens=1000,
                 temperature=temperature,
                 response_format={"type": response_format}
-                )
+            )
             resp = completion.choices[0].message.content
             return resp
         except Exception as e:
@@ -37,6 +39,7 @@ def api_call(client, query: Union[List, str], model_name="gpt-4o", response_form
             continue
     return ""
 
+
 def get_client(model_name):
     if 'gpt' in model_name:
         return gpt_client
@@ -45,10 +48,12 @@ def get_client(model_name):
     else:
         return llama_client
 
+
 def read_prompt_from_file(filename):
     with open(filename, 'r') as file:
         prompt = file.read()
     return prompt
+
 
 if __name__ == '__main__':
     query = "I have an array a with length of n, the function f(l, r) represents the sum of numbers in a from index l to r. I can re-sort the array a, to minimize the sum of all intervals"

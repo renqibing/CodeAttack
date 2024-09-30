@@ -1,5 +1,6 @@
-import time 
+import time
 from utils import api_call, get_client
+
 
 class TargetLLM:
     def __init__(self, model_name, max_tokens=0, seed=725, temperature=0.0):
@@ -20,5 +21,5 @@ class TargetLLM:
             except Exception as e:
                 print("error", e)
                 time.sleep(self.query_sleep)
-        summ = f"All retry attempts failed."
+        summ = "All retry attempts failed."
         return summ  # Or raise an exception if desired

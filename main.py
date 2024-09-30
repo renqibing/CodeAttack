@@ -1,12 +1,6 @@
 import argparse
 import json
 import os
-import time
-import openai
-import anthropic
-import replicate
-from typing import List, Union, Dict
-from openai import OpenAI
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from judge import GPT4Judge
@@ -36,14 +30,16 @@ if __name__ == "__main__":
     ##################################################
     args = parser.parse_args()
 
-    # 1. Generate the prompts based on CodeAttack 
-    data_preparer = DataPreparer(query_file=args.query_file, prompt_name=f"code_{args.prompt_type}.txt", prompt_type=args.prompt_type)
+    # 1. Generate the prompts based on CodeAttack
+    data_preparer = DataPreparer(query_file=args.query_file,
+                                 prompt_name=f"code_{args.prompt_type}.txt",
+                                 prompt_type=args.prompt_type)
     data_preparer.infer()
 
     if not args.no_attack:
         # 2. Attack the victime model and Auto-evaluate the results
         args.data_key = f"code_wrapped_{args.prompt_type}"
-        query_name = query_file.split('/')[-1].split('.')[0]
+        query_name = args._query_file.split('/')[-1].split('.')[0]
         f = open(
             f"./prompts/data_{query_name}_{args.prompt_type}.json",
         )
@@ -51,15 +47,15 @@ if __name__ == "__main__":
         datas = json.load(f)
         if args.end_idx == -1:
             args.end_idx = len(datas)
-        datas = datas[args.start_idx : args.end_idx]
+        datas = datas[args.start_idx: args.end_idx]
         f.close()
         results = [{} for _ in range(len(datas))]
-        
+
         judgeLLM = GPT4Judge(args.judge_model, prompt_type=args.prompt_type)
         postprocessor = PostProcessor(args.prompt_type)
 
         def func_wrap(idx, data, targetLLM=None):
-            if targetLLM is None:
+            if not targetLLM:
                 targetLLM = TargetLLM(
                     args.target_model,
                     args.target_max_n_tokens,
@@ -75,28 +71,34 @@ if __name__ == "__main__":
             target_response_list = []
             # random attack for args.num_samples times
             for j in range(args.num_samples):
-                # attack the victim model 
+                # attack the victim model
                 target_response = targetLLM.generate(question)
                 target_response_list.append(target_response)
-                # extract the harmful content from the generated code 
+                # extract the harmful content from the generated code
                 resp = postprocessor.core(target_response)
                 results[idx]["res_simplified"] = resp
                 if args.judge:
-                    # evaluate by JudgeLLM 
+                    # evaluate by JudgeLLM
                     score, reason = judgeLLM.infer(plain_attack, resp)
                     results[idx]["judge_score"] = score
                     results[idx]["judge_reason"] = reason
-            results[idx]["qA_pairs"].append({"Q": question, "A": target_response_list})
+            results[idx]["qA_pairs"].append(
+                {"Q": question, "A": target_response_list}
+            )
             print("===========================================\n")
             print("idx", idx)
             return
 
         if args.multi_thread:
             with ThreadPoolExecutor(max_workers=args.max_workers) as executor:
-                futures = executor.map(func_wrap, list(range(len(datas))), datas)
+                futures = executor.map(func_wrap,
+                                       list(range(len(datas))),
+                                       datas)
         else:
             targetLLM = TargetLLM(
-                args.target_model, args.target_max_n_tokens, temperature=args.temperature
+                args.target_model,
+                args.target_max_n_tokens,
+                temperature=args.temperature
             )
             for idx, data in enumerate(datas):
                 func_wrap(idx, data, targetLLM)
@@ -110,4 +112,3 @@ if __name__ == "__main__":
             "w+",
         ) as f:
             f.write(results_dumped)
-        f.close()

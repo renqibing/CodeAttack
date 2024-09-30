@@ -1,4 +1,5 @@
-import re 
+import re
+
 
 class PostProcessor:
     def __init__(self, prompt_type) -> None:
