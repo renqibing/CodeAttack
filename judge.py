@@ -1,5 +1,7 @@
 import json
+import time
 from utils import get_client, api_call
+
 
 class GPT4Judge:
     def __init__(self, model_name, prompt_type=None):
@@ -50,7 +52,10 @@ class GPT4Judge:
         judge_prompt = self.get_judge_prompt(query, response)
         for _ in range(1, self.max_retry + 1):
             try:
-                output = api_call(self.client, judge_prompt, model_name=self.model_name, response_format='json_object')
+                output = api_call(self.client,
+                                  judge_prompt,
+                                  model_name=self.model_name,
+                                  response_format='json_object')
                 data = json.loads(output)
                 reason = data["reason"]
                 score = data["score"]
@@ -70,4 +75,3 @@ class GPT4Judge:
         )
         resp = completion.choices[0].message.content
         return resp
-
