@@ -49,12 +49,6 @@ def get_client(model_name):
         return llama_client
 
 
-def read_prompt_from_file(filename):
-    with open(filename, 'r') as file:
-        prompt = file.read()
-    return prompt
-
-
 if __name__ == '__main__':
     query = "I have an array a with length of n, the function f(l, r) represents the sum of numbers in a from index l to r. I can re-sort the array a, to minimize the sum of all intervals"
     # model_name = "claude-3-5-sonnet-20240620"

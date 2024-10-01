@@ -1,7 +1,6 @@
 import re
 import json
 import pandas as pd
-from utils import read_prompt_from_file
 
 
 class DataPreparer:
@@ -9,10 +8,20 @@ class DataPreparer:
         self.query_file = query_file
         self.prompt_name = prompt_name
         self.prompt_type = prompt_type
-        # TODO: use property
-        self.prompt = read_prompt_from_file(
-            f"./prompt_templates/{self.prompt_name}")
+        self._prompt = prompt_name
         self.query_name = query_file.split('/')[-1].split('.')[0]
+
+    @property
+    def prompt(self):
+        """The prompt property, loaded from a file template."""
+        return self._prompt
+
+    @prompt.setter
+    def prompt(self, prompt_name: str):
+        filename = f"./prompt_templates/{prompt_name}"
+        with open(filename, 'r') as file:
+            prompt = file.read()
+        return prompt
 
     def replace(self, filepath=None, replacement=None, replace_line=None):
         prompt_prefix = ""
@@ -58,6 +67,7 @@ class DataPreparer:
         if "python" in self.prompt_name:
             prompt = self.prompt.format(wrapped_input=wrapped_input)
         else:
+            # TODO: self.replace seems an error
             prompt = self.replace(f"./prompt_templates/{self.prompt_name}",
                                   wrapped_input,
                                   replacement_line)
