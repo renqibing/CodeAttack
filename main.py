@@ -51,6 +51,7 @@ if __name__ == "__main__":
             args.end_idx = len(datas)
         datas = datas[args.start_idx: args.end_idx]
 
+    # TODO: do we really need to initialize this list?
     results = [{} for _ in range(len(datas))]
 
     judgeLLM = GPT4Judge(args.judge_model)
@@ -99,8 +100,8 @@ if __name__ == "__main__":
                                    datas)
     else:
         targetLLM = TargetLLM(
-            args.target_model,
-            args.target_max_n_tokens,
+            model_name=args.target_model,
+            max_tokens=args.target_max_n_tokens,
             temperature=args.temperature
         )
         for idx, data in enumerate(datas):
@@ -110,8 +111,7 @@ if __name__ == "__main__":
     os.makedirs("results", exist_ok=True)
     cur_time = datetime.now().strftime("%Y%m%d-%H%M%S")
     target_model = args.target_model.split("/")[-1]
-    with open(
-        f"./results/{target_model}_{args.exp_name}_{data_key}_temp_{args.temperature}_results_{cur_time}.json",
-        "w+",
-    ) as f:
+    with open(f"./results/{target_model}_{args.exp_name}_{data_key}_temp_"
+              f"{args.temperature}_results_{cur_time}.json",
+              "w+", ) as f:
         f.write(results_dumped)

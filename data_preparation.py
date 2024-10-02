@@ -87,6 +87,7 @@ class DataPreparer:
         return prompt
 
     def infer(self):
+        # TODO: If the prompt file already exists, avoid generating it again
         df = pd.read_csv(self.query_file)
         malicious_goals = df['goal'].tolist()
         # TODO: if it's not important to keep track of the index, then we can
@@ -94,7 +95,6 @@ class DataPreparer:
         # the results in the for loop
         results = [{} for _ in range(len(malicious_goals))]
         for idx, data in enumerate(malicious_goals):
-            # TODO: would dataclass or namestuple bring benefit?
             wrapped_res = {
                 "plain_attack": data,
                 f"code_wrapped_{self.prompt_type}": self.wrap(data)
@@ -102,7 +102,6 @@ class DataPreparer:
             results[idx] = wrapped_res
 
         results_dumped = json.dumps(results)
-        with open(
-            f'./prompts/data_{self.query_name}_{self.prompt_type}.json', 'w+'
-        ) as f:
+        with open(f'./prompts/data_{self.query_name}_{self.prompt_type}.json',
+                  'w+') as f:
             f.write(results_dumped)
