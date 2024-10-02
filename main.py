@@ -2,28 +2,28 @@ import argparse
 import json
 import os
 import sys
-from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from pathlib import Path
 
-from judge import GPT4Judge
-from target_llm import TargetLLM
 from data_preparation import DataPreparer
+from judge import GPT4Judge
 from post_processing import PostProcessor
+from target_llm import TargetLLM
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     ########### Target model parameters ##########
     parser.add_argument("--multi-thread", action="store_true", help="multi-thread generation")
     parser.add_argument("--max-workers", type=int, default=10, help="max workers for multi-thread generation")
-    parser.add_argument("--target-model", default="", help="Name of target model.")
-    parser.add_argument("--judge-model", default="gpt-4-1106-preview", help="Name of judge model.")
+    parser.add_argument("--target-model", type=str, help="Name of target model.")
+    parser.add_argument("--judge-model", type=str, default="gpt-4-1106-preview", help="Name of judge model.")
     parser.add_argument("--target-max-n-tokens", type=int, default=512, help="Maximum number of generated tokens for the target.")
     parser.add_argument("--exp-name", type=str, default="main", help="Experiment file name")
     parser.add_argument("--num-samples", type=int, default=1, help="number of output samples for each prompt")
     parser.add_argument("--temperature", type=float, default=0.0, help="temperature for generation")
-    parser.add_argument("--start-idx", type=int, default=0, help="start index of the data")
     parser.add_argument("--prompt-type", type=str, default="python_stack", help="type of adversarial prompt")
+    parser.add_argument("--start-idx", type=int, default=0, help="start index of the data")
     parser.add_argument("--end-idx", type=int, default=-1, help="end index of the data")
     parser.add_argument("--query-file", type=str, default="./data/harmful_inst_cases.csv")
     parser.add_argument("--no-attack", action="store_true", help="set true when only generating adversarial examples")
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # 2. Attack the victime model and Auto-evaluate the results
     data_key = f"code_wrapped_{args.prompt_type}"
-    query_name = Path(args._query_file).stem
+    query_name = Path(args.query_file).stem
     with open(f"./prompts/data_{query_name}_{args.prompt_type}.json") as f:
         datas = json.load(f)
         if args.end_idx == -1:
