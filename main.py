@@ -20,7 +20,6 @@ if __name__ == "__main__":
     parser.add_argument("--exp-name", type=str, default="main", help="Experiment file name")
     parser.add_argument("--num-samples", type=int, default=1, help="number of output samples for each prompt")
     parser.add_argument("--judge", action="store_true", help="whether to use LLMs to judge the generated response")
-    parser.add_argument("--data_key", type=str, default="plain_attack", help="data key for the experiment")
     parser.add_argument("--temperature", type=float, default=0.0, help="temperature for generation")
     parser.add_argument("--start-idx", type=int, default=0, help="start index of the data")
     parser.add_argument("--prompt-type", type=str, default="python_stack", help="type of adversarial prompt")
@@ -43,7 +42,7 @@ if __name__ == "__main__":
         sys.exit()
 
     # 2. Attack the victime model and Auto-evaluate the results
-    args.data_key = f"code_wrapped_{args.prompt_type}"
+    data_key = f"code_wrapped_{args.prompt_type}"
     query_name = args.query_file.split('/')[-1].split('.')[0]
     f = open(
         f"./prompts/data_{query_name}_{args.prompt_type}.json",
@@ -67,7 +66,7 @@ if __name__ == "__main__":
                 temperature=args.temperature,
             )
 
-        question = data[args.data_key]
+        question = data[data_key]
         plain_attack = data["plain_attack"]
 
         results[idx]["plain_attack"] = plain_attack
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     cur_time = datetime.now().strftime("%Y%m%d-%H%M%S")
     target_model = args.target_model.split("/")[-1]
     with open(
-        f"./results/{target_model}_{args.exp_name}_{args.data_key}_temp_{args.temperature}_results_{cur_time}.json",
+        f"./results/{target_model}_{args.exp_name}_{data_key}_temp_{args.temperature}_results_{cur_time}.json",
         "w+",
     ) as f:
         f.write(results_dumped)
