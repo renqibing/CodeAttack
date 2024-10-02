@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     results = [{} for _ in range(len(datas))]
 
-    judgeLLM = GPT4Judge(args.judge_model, prompt_type=args.prompt_type)
+    judgeLLM = GPT4Judge(args.judge_model)
     postprocessor = PostProcessor(args.prompt_type)
 
     def func_wrap(idx, data, targetLLM=None):

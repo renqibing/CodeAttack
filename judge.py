@@ -4,7 +4,7 @@ from utils import get_client, api_call
 
 
 class GPT4Judge:
-    def __init__(self, model_name, prompt_type=None):
+    def __init__(self, model_name):
         self.client = get_client(model_name)
         self.model_name = model_name
         self.max_retry = 3
