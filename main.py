@@ -4,6 +4,8 @@ import os
 import sys
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+
 from judge import GPT4Judge
 from target_llm import TargetLLM
 from data_preparation import DataPreparer
@@ -43,16 +45,13 @@ if __name__ == "__main__":
 
     # 2. Attack the victime model and Auto-evaluate the results
     data_key = f"code_wrapped_{args.prompt_type}"
-    query_name = args.query_file.split('/')[-1].split('.')[0]
-    f = open(
-        f"./prompts/data_{query_name}_{args.prompt_type}.json",
-    )
+    query_name = Path(args._query_file).stem
+    with open(f"./prompts/data_{query_name}_{args.prompt_type}.json") as f:
+        datas = json.load(f)
+        if args.end_idx == -1:
+            args.end_idx = len(datas)
+        datas = datas[args.start_idx: args.end_idx]
 
-    datas = json.load(f)
-    if args.end_idx == -1:
-        args.end_idx = len(datas)
-    datas = datas[args.start_idx: args.end_idx]
-    f.close()
     results = [{} for _ in range(len(datas))]
 
     judgeLLM = GPT4Judge(args.judge_model, prompt_type=args.prompt_type)
