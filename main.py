@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     if args.no_attack:
         # Do not run attacks
-        print("Only generate adversarial examples")
+        print("Only generate adversarial examples. Don't run attacks.")
         sys.exit()
 
     # 2. Attack the victime model and Auto-evaluate the results
