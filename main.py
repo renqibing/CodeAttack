@@ -111,7 +111,9 @@ if __name__ == "__main__":
     os.makedirs("results", exist_ok=True)
     cur_time = datetime.now().strftime("%Y%m%d-%H%M%S")
     target_model = args.target_model.split("/")[-1]
-    with open(f"./results/{target_model}_{args.exp_name}_{data_key}_temp_"
-              f"{args.temperature}_results_{cur_time}.json",
-              "w+", ) as f:
+    res_filename = (f"./results/{target_model}_{args.exp_name}_{data_key}"
+                    f"_temp_{args.temperature}_results_{cur_time}.json")
+    with open(res_filename, "w+", ) as f:
         f.write(results_dumped)
+
+    print(f"Results added in file {res_filename}")
