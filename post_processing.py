@@ -1,7 +1,8 @@
-import re 
+import re
+
 
 class PostProcessor:
-    def __init__(self, prompt_type) -> None:
+    def __init__(self, prompt_type):
         self.prompt_type = prompt_type
 
     def core(self, response):

@@ -20,7 +20,6 @@ python3 main.py --num-sample 1 \
 --prompt-type python_stack_plus \
 --query-file ./data/harmful_behaviors.csv \
 --target-model=gpt-4o \
---judge \
 --judge-model=gpt-4o \
 --exp-name=main \
 --target-max-n-tokens=1000 \

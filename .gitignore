@@ -1,1 +1,5 @@
 prompt_examples/
+
+__pycache__
+venv
+results
