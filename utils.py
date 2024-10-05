@@ -4,8 +4,8 @@ from typing import Union, List
 
 
 # Implement your gpt client here
-API_KEY = ""
-BASE_URL_GPT = ""
+API_KEY = os.getenv("GPT_API_KEY")
+BASE_URL_GPT = os.getenv("BASE_URL_GPT")
 gpt_client = OpenAI(base_url=BASE_URL_GPT, api_key=API_KEY)
 # Implement your claude client here
 claude_client = ""
