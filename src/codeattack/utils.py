@@ -7,6 +7,7 @@ from typing import Union, List
 def api_call(client,
              query: Union[List, str],
              model_name: str,
+             max_tokens=1000,
              response_format='text',
              temperature=1.0):
     if isinstance(query, List):
@@ -18,7 +19,7 @@ def api_call(client,
             completion = client.chat.completions.create(
                 model=model_name,
                 messages=messages,
-                max_tokens=1000,
+                max_tokens=max_tokens,
                 temperature=temperature,
                 response_format={"type": response_format}
             )
