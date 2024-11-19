@@ -1,5 +1,6 @@
 import time
-from utils import api_call, get_client
+
+from .utils import api_call, get_client
 
 
 class TargetLLM:
