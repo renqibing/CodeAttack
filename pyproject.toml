@@ -1,0 +1,37 @@
+[build-system]
+requires = ['setuptools >= 61.0']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'codeattack'
+version = '0.0.1'
+dynamic = ['dependencies']
+authors = [{name = 'Qibing Ren'}]
+description = 'CodeAttack'
+readme = 'README.md'
+license = {file = 'LICENSE'}
+requires-python = '> 3.8, < 3.13'
+classifiers = [
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Operating System :: OS Independent',
+    'Topic :: Security',
+]
+
+[tool.setuptools.package-data]
+"codeattack.dataset" = ["*.csv"]
+"codeattack.prompt_templates" = ["*.txt"]
+
+[project.scripts]
+codeattack = 'codeattack.__main__:main'
+
+[tool.setuptools.dynamic]
+dependencies = {file = ['requirements.txt']}
+
+[project.urls]
+Homepage = 'https://github.com/renqibing/CodeAttack'
+Documentation = 'https://arxiv.org/abs/2403.07865'
+Issues = 'https://github.com/renqibing/CodeAttack/issues'

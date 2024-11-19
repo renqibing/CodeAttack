@@ -1,0 +1,2 @@
+include src/codeattack/dataset/*.csv
+include src/codeattack/prompt_templates/*.txt
