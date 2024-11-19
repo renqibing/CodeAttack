@@ -4,16 +4,6 @@ from openai import OpenAI
 from typing import Union, List
 
 
-# Implement your gpt client here
-API_KEY = os.getenv("GPT_API_KEY")
-BASE_URL_GPT = os.getenv("BASE_URL_GPT")
-gpt_client = OpenAI(base_url=BASE_URL_GPT, api_key=API_KEY)
-# Implement your claude client here
-claude_client = ""
-# Implement your llama client here
-llama_client = ""
-
-
 def api_call(client, query: Union[List, str],
              model_name="gpt-4o",
              response_format='text',
@@ -43,10 +33,15 @@ def api_call(client, query: Union[List, str],
 
 def get_client(model_name):
     if 'gpt' in model_name:
+        API_KEY = os.getenv("GPT_API_KEY")
+        BASE_URL_GPT = os.getenv("BASE_URL_GPT")
+        gpt_client = OpenAI(base_url=BASE_URL_GPT, api_key=API_KEY)
         return gpt_client
     elif 'claude' in model_name:
+        claude_client = ''
         return claude_client
     else:
+        llama_client = ''
         return llama_client
 
 
