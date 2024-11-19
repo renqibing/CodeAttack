@@ -1,3 +1,4 @@
+import os
 import time
 from openai import OpenAI
 from typing import Union, List
