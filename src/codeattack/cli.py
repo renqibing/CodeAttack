@@ -5,13 +5,16 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
+from importlib.resources import files
 
-from data_preparation import DataPreparer
-from judge import GPT4Judge
-from post_processing import PostProcessor
-from target_llm import TargetLLM
+from codeattack import dataset
+from codeattack.data_preparation import DataPreparer
+from codeattack.judge import GPT4Judge
+from codeattack.post_processing import PostProcessor
+from codeattack.target_llm import TargetLLM
 
-if __name__ == "__main__":
+
+def main():
     parser = argparse.ArgumentParser()
     ########### Target model parameters ##########
     parser.add_argument("--multi-thread", action="store_true", help="multi-thread generation")
@@ -25,7 +28,7 @@ if __name__ == "__main__":
     parser.add_argument("--prompt-type", type=str, default="python_stack", help="type of adversarial prompt")
     parser.add_argument("--start-idx", type=int, default=0, help="start index of the data")
     parser.add_argument("--end-idx", type=int, default=-1, help="end index of the data")
-    parser.add_argument("--query-file", type=str, default="./data/harmful_inst_cases.csv")
+    parser.add_argument("--query-file", type=str, default=files(dataset) / "harmful_behaviors.csv")
     parser.add_argument("--no-attack", action="store_true", help="set true when only generating adversarial examples")
 
     ##################################################

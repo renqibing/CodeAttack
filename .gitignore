@@ -3,3 +3,6 @@ prompt_examples/
 __pycache__
 venv
 results
+build
+codeattack.egg-info
+prompts/*.json

@@ -1,6 +1,7 @@
 import json
 import time
-from utils import get_client, api_call
+
+from .utils import get_client, api_call
 
 
 class GPT4Judge:
