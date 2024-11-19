@@ -1,5 +1,7 @@
-import re
 import json
+import re
+from importlib.resources import files
+
 import pandas as pd
 
 
@@ -9,7 +11,6 @@ class DataPreparer:
         self.prompt_name = prompt_name
         self.prompt_type = prompt_type
         self._prompt = prompt_name
-        self.query_name = query_file.split('/')[-1].split('.')[0]
 
     @property
     def prompt(self):
@@ -18,14 +19,15 @@ class DataPreparer:
 
     @prompt.setter
     def prompt(self, prompt_name: str):
-        filename = f"./prompt_templates/{prompt_name}"
-        with open(filename, 'r') as file:
-            prompt = file.read()
+        prompt = files('codeattack.prompt_templates').joinpath(
+            f'{prompt_name}').read_text()
         return prompt
 
-    def replace(self, filepath, replacement, replace_line=None):
+    def replace(self, file_name, replacement, replace_line=None):
         prompt_prefix = ""
-        prompt_prefix_file = open(filepath, 'r')
+        # prompt_prefix_file = open(filepath, 'r')
+        prompt_prefix_file = files('codeattack.prompt_templates').joinpath(
+            file_name).open_text()
         for i, line in enumerate(prompt_prefix_file):
             if replace_line is not None and i == replace_line:
                 prompt_prefix += replacement
@@ -81,12 +83,13 @@ class DataPreparer:
             # If the template is in a language other than python, use the
             # replace function from this class
             # TODO
-            prompt = self.replace(f"./prompt_templates/{self.prompt_name}",
+            prompt = self.replace(f"{self.prompt_name}",
                                   wrapped_input,
                                   replacement_line)
         return prompt
 
     def infer(self):
+        """TODO"""
         # TODO: If the prompt file already exists, avoid generating it again
         df = pd.read_csv(self.query_file)
         malicious_goals = df['goal'].tolist()
@@ -101,7 +104,9 @@ class DataPreparer:
             }
             results[idx] = wrapped_res
 
+        # Write results to file
         results_dumped = json.dumps(results)
-        with open(f'./prompts/data_{self.query_name}_{self.prompt_type}.json',
-                  'w+') as f:
+        query_name = str(self.query_file).split('/')[-1].split('.')[0]
+        result_file_name = f'data_{query_name}_{self.prompt_type}.json'
+        with open(f'./prompts/{result_file_name}', 'w+') as f:
             f.write(results_dumped)
